@@ -1,0 +1,26 @@
+.Sidebar {
+    display: grid;
+    grid-template-columns: 1fr;
+    text-align: center;
+    background-color: #fff689;
+    height: 100%;
+    /*color: #58355e;*/
+    color: #65587f;
+}
+
+.Sidebar button {
+    width: 60%;
+    align-self: center;
+    justify-self: center;
+    font-family: 'Gloria Hallelujah', cursive;
+    border: none;
+    color: #65587f;
+    background-color: #d6ffb7;
+    box-shadow: 2px 2px 1px #7ae7c7;
+}
+
+.Sidebar button:hover{
+    background-color: #fcf8e8;
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 1px #7ae7c7;
+}
