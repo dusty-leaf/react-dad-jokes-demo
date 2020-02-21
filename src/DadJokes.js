@@ -11,7 +11,8 @@ class DadJokes extends React.Component {
         super(props);
 
         this.state = {
-            jokes: [],
+            // JSON.parse jokes if any are present, otherwise parse an empty array
+            jokes: JSON.parse(window.localStorage.getItem("jokes") || "[]"),
             isLoaded: false
         }
 
@@ -26,8 +27,12 @@ class DadJokes extends React.Component {
     }
 
     componentDidMount(){
-        //fetch an intial batch of jokes
-        this.getNewJokes();
+        //fetch new jokes if none are saved in local storage, otherwise set the page to loaded
+        if(this.state.jokes.length === 0){
+            this.getNewJokes();
+        } else {
+            this.setState({ isLoaded: true });
+        }
     }
 
     async getNewJokes(arr = []){
@@ -63,11 +68,15 @@ class DadJokes extends React.Component {
         let oldJokes = new Set(this.state.jokes);
         newJokes = newJokes.filter(joke => (!oldJokes.has(joke)));
 
-        // if no duplicates had to be purged, add newJokes to jokes array in state and toggle loader off
+        // if no duplicates had to be purged, add newJokes to jokes array in state, toggle loader off, and sync with localStorage
         if(newJokes.length === this.props.numJokesToGet){
             this.setState(st => ({
                 jokes: this.state.jokes.concat(newJokes), isLoaded: true
-            }));
+            }),
+            () => {
+                window.localStorage.setItem("jokes", JSON.stringify(this.state.jokes));
+            });
+            
         } else {
             //if some duplicates had to be purged, begin process again keeping the unique jokes that were already fetched
             this.getNewJokes(newJokes);
@@ -105,8 +114,14 @@ class DadJokes extends React.Component {
         // add updatedJoke to updatedJokes
         updatedJokes.push({ id: updatedJoke[0].id, joke: updatedJoke[0].joke, score: updatedJoke[0].score });
 
-        // set state with new jokes array
-        this.setState({ jokes: updatedJokes });   
+        // set state with new jokes array, then sync with localStorage
+        this.setState(st => (
+            { jokes: updatedJokes }
+        ),
+        () => {
+            window.localStorage.setItem("jokes", JSON.stringify(this.state.jokes));   
+        });
+        
     }
 
     sortByScore(){
