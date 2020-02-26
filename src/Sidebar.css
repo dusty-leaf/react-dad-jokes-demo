@@ -24,3 +24,13 @@
     transform: translate(1px, 1px);
     box-shadow: 1px 1px 1px #7ae7c7;
 }
+
+@media screen and (max-width: 415px) {
+    .Sidebar {
+        height: 100px;
+        padding-bottom: 20px;
+    }
+    .Sidebar i {
+        display: none;
+    }
+}
